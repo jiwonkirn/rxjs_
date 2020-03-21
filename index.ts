@@ -9,35 +9,33 @@ const getPath = (filePath: string = '') => path.resolve(__dirname, filePath)
 const arg = process.argv[2]
 const reg = /\d+\-\d+/
 
-function handleError(message: string) {
-  console.log(message)
-  process.exit(1)
+async function findPath(relativePath: string, regExp: RegExp, errorMessage: string) {
+  const paths = await readDir(getPath(relativePath), 'utf-8')
+  const path = paths.find((d) => regExp.test(d))
+
+  if (!path) {
+    throw new Error(errorMessage)
+  }
+
+  return path
 }
 
 async function main() {
   if (!reg.test(arg)) {
-    return handleError(`Argument should be 'number-number' form like '1-2'.`)
+    throw new Error(`Argument should be 'number-number' form like '1-2'.`)
   }
 
   const [dirNum, fileNum] = arg.split('-')
   const dirReg = new RegExp(`^${dirNum}\\..+`)
   const fileReg = new RegExp(`^${fileNum}\\..+`)
 
-  const dirs = await readDir(getPath(), 'utf-8')
-  const dir = dirs.find((d) => dirReg.test(d))
-
-  if (!dir) {
-    return handleError(`Directory is not exist.`)
-  }
-
-  const files = await readDir(getPath(dir), 'utf-8')
-  const file = files.find((d) => fileReg.test(d))
-  
-  if (!file) {
-    return handleError(`File is not exist.`)
-  }
+  const dir = await findPath('', dirReg, 'Directory is not exist.')
+  const file = await findPath(dir, fileReg, 'File is not exist.')
 
   import(getPath(`${dir}/${file}`))
 }
 
-main().catch(({message}) => handleError(message))
+main().catch(({message}) => {
+  console.error(message)
+  process.exit(1)
+})
