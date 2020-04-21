@@ -25,7 +25,6 @@ import fetch from 'node-fetch'
   response from req3
  */
 
-
 /**
  * 배열, 유사배열
  * project 함수가 배열을 리턴하면 배열의 길이만큼 순회하며 next 함수로 값을 순회하며 next 함수로 값을 발행한 후
@@ -56,11 +55,10 @@ import fetch from 'node-fetch'
   complete!
  */
 
-
- /**
-  * 프로미스
-  * 프로미스를 사용할 수 있으며, 별도로 옵저버블로 변환해줄 필요가 없다.
-  */
+/**
+ * 프로미스
+ * 프로미스를 사용할 수 있으며, 별도로 옵저버블로 변환해줄 필요가 없다.
+ */
 // range(0, 3).pipe(mergeMap(
 //   v => new Promise(res => setTimeout(() => res(`req${v + 1}`), Math.floor(Math.random() * 2000)))
 // )).subscribe(v => console.log(`response from ${v}`))
@@ -71,7 +69,6 @@ import fetch from 'node-fetch'
   response from req2
   response from req1
  */
-
 
 /**
  * 이터러블
@@ -98,7 +95,6 @@ import fetch from 'node-fetch'
   key is plusOne, value is 3.
  */
 
-
 /**
  * concurrent
  * mergeMap에서 새롭게 return하는 옵저버블이 너무 많을 수 있기 때문에 concurrent 매개변수로 제어할 수 있다.
@@ -111,30 +107,28 @@ interface Res {
   url: string
 }
 
-const colors = [
-  'blue', 'red', 'black', 'yellow', 'green',
-  'brown', 'gray', 'purple', 'gold', 'white'
-]
+const colors = ['blue', 'red', 'black', 'yellow', 'green', 'brown', 'gray', 'purple', 'gold', 'white']
 
 const concurrent = 5
 const maxDelayInSecs = 6
 console.time('request_color')
 
-range(0, colors.length).pipe(
-  mergeMap(colorIndex => {
+range(0, colors.length)
+  .pipe(
+    mergeMap(colorIndex => {
       const currentDelay = Math.floor(Math.random() * maxDelayInSecs)
       console.log(`[Request Color]: ${colors[colorIndex]}, currentDelay: ${currentDelay}`)
-      return fetch(`https://httpbin.org/delay/${currentDelay}?color_name=${colors[colorIndex]}`)
-                .then((res) => res.json())
-    }, concurrent)
-).subscribe(
-  (res: Res) => console.log(`<Response> args: ${JSON.stringify(res.args)}, url: ${res.url}`),
-  console.error,
-  () => {
-    console.log('complete')
-    console.timeEnd('request_color')
-  }
-)
+      return fetch(`https://httpbin.org/delay/${currentDelay}?color_name=${colors[colorIndex]}`).then(res => res.json())
+    }, concurrent),
+  )
+  .subscribe(
+    (res: Res) => console.log(`<Response> args: ${JSON.stringify(res.args)}, url: ${res.url}`),
+    console.error,
+    () => {
+      console.log('complete')
+      console.timeEnd('request_color')
+    },
+  )
 /**
   result:
   [Request Color]: blue, currentDelay: 1
@@ -142,7 +136,7 @@ range(0, colors.length).pipe(
   [Request Color]: black, currentDelay: 2
   [Request Color]: yellow, currentDelay: 4
   [Request Color]: green, currentDelay: 3
-  
+
   blue 응답받은 후 brwon 요청
   <Response> args: {"color_name":"blue"}, url: https://httpbin.org/delay/1?color_name=blue
   [Request Color]: brown, currentDelay: 5
@@ -162,7 +156,7 @@ range(0, colors.length).pipe(
   red 응답받은 후 white 요청
   <Response> args: {"color_name":"red"}, url: https://httpbin.org/delay/4?color_name=red
   [Request Color]: white, currentDelay: 3
-  
+
   나머지 응답
   <Response> args: {"color_name":"purple"}, url: https://httpbin.org/delay/1?color_name=purple
   <Response> args: {"color_name":"brown"}, url: https://httpbin.org/delay/5?color_name=brown
