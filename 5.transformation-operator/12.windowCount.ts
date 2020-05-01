@@ -7,28 +7,28 @@
 import { interval } from 'rxjs'
 import { take, map, windowCount, concatMap, filter, scan, last, mergeMap, defaultIfEmpty } from 'rxjs/operators'
 
-// const message = '안녕하세요. RxJS 테스트 입니다'
+const message = '안녕하세요. RxJS 테스트 입니다'
 
-// interval(90)
-//   .pipe(
-//     take(message.length),
-//     map(x => {
-//       const character = message.charAt(x)
-//       console.log(character)
-//       return character
-//     }),
-//     windowCount(5),
-//     concatMap(windowObservable => {
-//       console.log('windowObservable 넘어옴')
-//       return windowObservable.pipe(
-//         filter(x => x != ' '),
-//         take(3),
-//         scan((acc, cur) => acc + cur, ''),
-//         last(),
-//       )
-//     }),
-//   )
-//   .subscribe(res => console.log(`result: ${res}`))
+interval(90)
+  .pipe(
+    take(message.length),
+    map(x => {
+      const character = message.charAt(x)
+      console.log(character)
+      return character
+    }),
+    windowCount(5),
+    concatMap(windowObservable => {
+      console.log('windowObservable 넘어옴')
+      return windowObservable.pipe(
+        filter(x => x != ' '),
+        take(3),
+        scan((acc, cur) => acc + cur, ''),
+        last(),
+      )
+    }),
+  )
+  .subscribe(res => console.log(`result: ${res}`))
 /**
   result:
   인자로 넘어간 숫자만큼 정확한 개수 단위로 구간을 나눈다.
