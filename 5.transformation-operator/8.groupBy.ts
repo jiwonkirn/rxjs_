@@ -16,21 +16,21 @@
  * ): OperatorFunction<T, GroupedObservable<K, R>>
  */
 
-import { interval, merge, GroupedObservable, BehaviorSubject } from 'rxjs'
+import { interval, BehaviorSubject } from 'rxjs'
 import { take, groupBy, mergeMap, map, reduce, tap } from 'rxjs/operators'
 
 // keySelector
-// interval(300)
-//   .pipe(
-//     take(10),
-//     groupBy(x => Math.random() < 0.7),
-//     mergeMap(groupedObservable =>
-//       groupedObservable.key === true
-//         ? groupedObservable.pipe(map(x => `당첨!! ${x}`))
-//         : groupedObservable.pipe(map(x => `꽝!! ${x}`)),
-//     ),
-//   )
-//   .subscribe(res => console.log(res))
+interval(300)
+  .pipe(
+    take(10),
+    groupBy(x => Math.random() < 0.7),
+    mergeMap(groupedObservable =>
+      groupedObservable.key === true
+        ? groupedObservable.pipe(map(x => `당첨!! ${x}`))
+        : groupedObservable.pipe(map(x => `꽝!! ${x}`)),
+    ),
+  )
+  .subscribe(res => console.log(res))
 
 /**
   result:
@@ -53,20 +53,20 @@ import { take, groupBy, mergeMap, map, reduce, tap } from 'rxjs/operators'
 /**
  * elementSelector는 keySelector로 생선한 groupedObservable 인스턴스에 전달하는 값을 바꿔준다.
  */
-// interval(500)
-//   .pipe(
-//     take(10),
-//     groupBy(
-//       x => Math.random() < 0.7,
-//       x => `${x}-${x % 2 === 0 ? '짝수' : '홀수'}`,
-//     ),
-//     mergeMap(groupedObservable =>
-//       groupedObservable.key === true
-//         ? groupedObservable.pipe(map(x => `당첨!! ${x}`))
-//         : groupedObservable.pipe(map(x => `꽝!! ${x}`)),
-//     ),
-//   )
-//   .subscribe(res => console.log(res))
+interval(500)
+  .pipe(
+    take(10),
+    groupBy(
+      x => Math.random() < 0.7,
+      x => `${x}-${x % 2 === 0 ? '짝수' : '홀수'}`,
+    ),
+    mergeMap(groupedObservable =>
+      groupedObservable.key === true
+        ? groupedObservable.pipe(map(x => `당첨!! ${x}`))
+        : groupedObservable.pipe(map(x => `꽝!! ${x}`)),
+    ),
+  )
+  .subscribe(res => console.log(res))
 /**
   result:
   참고로 keySelector 함수는 elementSelector 함수에서 리턴하는 값이 아닌 소스 옵저버블에서 발행하는 값을 기준으로 삼는다.
@@ -93,26 +93,26 @@ import { take, groupBy, mergeMap, map, reduce, tap } from 'rxjs/operators'
  * 이후 같은 키에 해당하는 값을 소스 옵저버블에서 발행하면 키에 관한 매핑이 없으므로
  * durationSelector 함수에서 리턴하는 옵저버블을 새로 매핑해 구독한다.
  */
-// interval(500)
-//   .pipe(
-//     take(10),
-//     groupBy(
-//       x => Math.random() < 0.7,
-//       x => `${x} - ${x % 2 === 0 ? '짝수' : '홀수'}`,
-//     ),
-//     mergeMap(groupedObservable =>
-//       groupedObservable.key === true
-//         ? groupedObservable.pipe(
-//             map(x => `당첨!!: (${x})`),
-//             reduce<string, string[]>((acc, cur) => [...acc, cur], []),
-//           )
-//         : groupedObservable.pipe(
-//             map(x => `꽝!! (${x})`),
-//             reduce<string, string[]>((acc, cur) => [...acc, cur], []),
-//           ),
-//     ),
-//   )
-//   .subscribe(res => console.log(res))
+interval(500)
+  .pipe(
+    take(10),
+    groupBy(
+      x => Math.random() < 0.7,
+      x => `${x} - ${x % 2 === 0 ? '짝수' : '홀수'}`,
+    ),
+    mergeMap(groupedObservable =>
+      groupedObservable.key === true
+        ? groupedObservable.pipe(
+            map(x => `당첨!!: (${x})`),
+            reduce<string, string[]>((acc, cur) => [...acc, cur], []),
+          )
+        : groupedObservable.pipe(
+            map(x => `꽝!! (${x})`),
+            reduce<string, string[]>((acc, cur) => [...acc, cur], []),
+          ),
+    ),
+  )
+  .subscribe(res => console.log(res))
 
 /**
   result:
@@ -129,30 +129,30 @@ import { take, groupBy, mergeMap, map, reduce, tap } from 'rxjs/operators'
   [ '꽝!! (7 - 홀수)', '꽝!! (8 - 짝수)', '꽝!! (9 - 홀수)' ]
  */
 
-// interval(500)
-//   .pipe(
-//     take(10),
-//     groupBy(
-//       x => Math.random() < 0.7,
-//       x => `${x} - ${x % 2 === 0 ? '짝수' : '홀수'}`,
-//       groupedObservable =>
-//         groupedObservable.key === true
-//           ? interval(600).pipe(tap(x => console.log(`당첨 duration ${x}`)))
-//           : interval(2000).pipe(tap(x => console.log(`꽝 duration ${x}`))),
-//     ),
-//     mergeMap(groupedObservable =>
-//       groupedObservable.key === true
-//         ? groupedObservable.pipe(
-//             map(x => `당첨!! (${x})`),
-//             reduce<string, string[]>((acc, cur) => [...acc, cur], []),
-//           )
-//         : groupedObservable.pipe(
-//             map(x => `꽝!! (${x})`),
-//             reduce<string, string[]>((acc, cur) => [...acc, cur], []),
-//           ),
-//     ),
-//   )
-//   .subscribe(res => console.log(res))
+interval(500)
+  .pipe(
+    take(10),
+    groupBy(
+      x => Math.random() < 0.7,
+      x => `${x} - ${x % 2 === 0 ? '짝수' : '홀수'}`,
+      groupedObservable =>
+        groupedObservable.key === true
+          ? interval(600).pipe(tap(x => console.log(`당첨 duration ${x}`)))
+          : interval(2000).pipe(tap(x => console.log(`꽝 duration ${x}`))),
+    ),
+    mergeMap(groupedObservable =>
+      groupedObservable.key === true
+        ? groupedObservable.pipe(
+            map(x => `당첨!! (${x})`),
+            reduce<string, string[]>((acc, cur) => [...acc, cur], []),
+          )
+        : groupedObservable.pipe(
+            map(x => `꽝!! (${x})`),
+            reduce<string, string[]>((acc, cur) => [...acc, cur], []),
+          ),
+    ),
+  )
+  .subscribe(res => console.log(res))
 
 /**
   result:
