@@ -9,17 +9,17 @@ import { take, map, bufferCount, filter } from 'rxjs/operators'
 
 const message = '안녕하세요. RxJS 테스트 입니다.'
 
-// interval(90)
-//   .pipe(
-//     take(message.length),
-//     map(x => {
-//       const character = message.charAt(x)
-//       console.log(character)
-//       return character
-//     }),
-//     bufferCount(5),
-//   )
-//   .subscribe(res => console.log(`buffer: [${res}]`))
+interval(90)
+  .pipe(
+    take(message.length),
+    map(x => {
+      const character = message.charAt(x)
+      console.log(character)
+      return character
+    }),
+    bufferCount(5),
+  )
+  .subscribe(res => console.log(`buffer: [${res}]`))
 /**
   result:
   bufferCount 연산자는 buffer 연산자와는 다르게 버퍼에 저장한 값이 있으면 complete 함수를 호출해도 발행한다.

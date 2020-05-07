@@ -69,8 +69,8 @@ const source$ = interval(500).pipe(
   pluck('a'),
 )
 
-// source$.subscribe(res => console.log(`result1: ${res}`))
-// setTimeout(() => source$.subscribe(res => console.log(`result2 ${res}`)), 3100)
+source$.subscribe(res => console.log(`result1: ${res}`))
+setTimeout(() => source$.subscribe(res => console.log(`result2 ${res}`)), 3100)
 /**
   result:
 

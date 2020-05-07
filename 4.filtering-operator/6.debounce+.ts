@@ -16,26 +16,31 @@ import { take, debounce, tap, debounceTime } from 'rxjs/operators'
 
 /**
  * debounce 연산자
- * 선택자 함수로, 소스 옵져버블에서 발행하는 값을 인자로 사용한다. 
+ * 선택자 함수로, 소스 옵져버블에서 발행하는 값을 인자로 사용한다.
  * 해당 선택자 함수에서 리턴하는 옵저버블이나 프로미스는 소스 옵저버블에서 발행한 다음 값을 전달받지 않으면 값을 발행한다.
  */
 const sourceInterval = 400
 
-interval(sourceInterval).pipe(
-  take(8),
-  debounce(srcVal => interval(
-    srcVal % 2 === 0 ? sourceInterval * 1.2 : sourceInterval * 0.8
-  ).pipe(
-    tap(innerVal => console.log(
-      `sourceInterval value: ${srcVal},
-      innerInterval value: ${innerVal}`
-    ))
-  ))
-).subscribe(x => console.log(`result: ${x}`))
+interval(sourceInterval)
+  .pipe(
+    take(8),
+    debounce(srcVal =>
+      interval(srcVal % 2 === 0 ? sourceInterval * 1.2 : sourceInterval * 0.8).pipe(
+        tap(innerVal =>
+          console.log(
+            `sourceInterval value: ${srcVal},
+      innerInterval value: ${innerVal}`,
+          ),
+        ),
+      ),
+    ),
+  )
+  .subscribe(x => console.log(`result: ${x}`))
 
 /**
   result:
   홀수일 때 interval 시간이 400 * 0.8로 빨라지면서 값을 방출할 수 있게된다.
+  마지막에 tap의 로그를 출력하지 않는 이유는 take 연산자에서 complete 함수를 호출하기 때문이다.
 
   sourceInterval value: 1,
         innerInterval value: 0
@@ -49,37 +54,34 @@ interval(sourceInterval).pipe(
   result: 7
  */
 
-
 /**
  * debounceTime 연산자
- * 값의 발행을 기다리는 일정 시간을 인자로 설정한 후 
+ * 값의 발행을 기다리는 일정 시간을 인자로 설정한 후
  * 해당 시간 안에 소스 옵저버블에서 발행한 다음 값을 전달받지 않으면 최근 값을 그대로 발행하는 연산자.
  */
 
 // 1.
-interval(3000).pipe(
-  take(8),
-  debounceTime(2000)
-).subscribe(x => console.log(
-  `- interval(3000).pipe(take(4), debounceTime(2000)) next: ${x}`
-))
+interval(3000)
+  .pipe(take(8), debounceTime(2000))
+  .subscribe(x => console.log(`- interval(3000).pipe(take(4), debounceTime(2000)) next: ${x}`))
 
 // 2.
-interval(400).pipe(
-  take(8),
-  debounceTime(500)
-).subscribe(x => console.log(
-  `-- interval(400).pipe(take(4), debounceTime(500)) next: ${x}`
-))
+interval(400)
+  .pipe(take(8), debounceTime(500))
+  .subscribe(x => console.log(`-- interval(400).pipe(take(4), debounceTime(500)) next: ${x}`))
 /**
   result:
   1번은 소스 옵저버블의 interval time보다 debounceTime이 짧기 때문어 모든 값을 발행할 수 있다.
   하지만 2번은 debounceTime이 더 길기때문에 값을 발행하지 않다가 마지막 값을 발행한다.
   마지막 값은 이후에 값이 없으므로 complete 함수와 동시에 무조건 발행된다.
 
-  - interval(400).pipe(take(4), debounceTime(300)) next: 0
-  - interval(400).pipe(take(4), debounceTime(300)) next: 1
-  - interval(400).pipe(take(4), debounceTime(300)) next: 2
-  - interval(400).pipe(take(4), debounceTime(300)) next: 3
-  -- interval(400).pipe(take(4), debounceTime(500)) next: 3
+  -- interval(400).pipe(take(4), debounceTime(500)) next: 7
+  - interval(3000).pipe(take(4), debounceTime(2000)) next: 0
+  - interval(3000).pipe(take(4), debounceTime(2000)) next: 1
+  - interval(3000).pipe(take(4), debounceTime(2000)) next: 2
+  - interval(3000).pipe(take(4), debounceTime(2000)) next: 3
+  - interval(3000).pipe(take(4), debounceTime(2000)) next: 4
+  - interval(3000).pipe(take(4), debounceTime(2000)) next: 5
+  - interval(3000).pipe(take(4), debounceTime(2000)) next: 6
+  - interval(3000).pipe(take(4), debounceTime(2000)) next: 7
  */
