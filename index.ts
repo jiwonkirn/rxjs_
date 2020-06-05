@@ -11,7 +11,7 @@ const reg = /\d+\-\d+/
 
 async function findPath(relativePath: string, regExp: RegExp, errorMessage: string) {
   const paths = await readDir(getPath(relativePath), 'utf-8')
-  const path = paths.find((d) => regExp.test(d))
+  const path = paths.find(d => regExp.test(d))
 
   if (!path) {
     throw new Error(errorMessage)
@@ -35,7 +35,7 @@ async function main() {
   import(getPath(`${dir}/${file}`))
 }
 
-main().catch(({message}) => {
+main().catch(({ message }) => {
   console.error(message)
   process.exit(1)
 })

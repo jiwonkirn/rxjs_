@@ -7,6 +7,7 @@
     "push": "ts-node --project=./tsconfig.json push.ts"
   },
   "devDependencies": {
+    "@types/axios": "^0.14.0",
     "@types/node": "^13.9.2",
     "@types/shelljs": "^0.8.7",
     "prettier": "^2.0.4",
@@ -19,6 +20,7 @@
   },
   "dependencies": {
     "@types/node-fetch": "^2.5.6",
+    "axios": "^0.19.2",
     "commander": "^5.1.0",
     "node-fetch": "^2.6.0",
     "rxjs": "^6.5.4"
