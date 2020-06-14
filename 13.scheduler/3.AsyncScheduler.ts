@@ -20,7 +20,7 @@ asyncScheduler.schedule(function work(value: any) {
   result:
   selfAction는 AsyncAction의 인스턴스다. 즉 work 함수는 AsyncAction의 인스턴스에서 실행된다.
   만약 1초가 아닌 다른값으로 delay를 설정하는 경우 기존에 setInterval 함수로 동작하던 액션을 모두 실행한 후 clearInterval 함수로 해당 setInterval 함수를 초기화한다.
-  그리고 새롭게 설정한 delay 값으로 setInterval 함수릐 값을 설정해 work 함수를 실행한다.
+  그리고 새롭게 설정한 delay 값으로 setInterval 함수의 값을 설정해 work 함수를 실행한다.
   (setTimeout(deferredTask, 0)을 실행시키려면 AsapScheduler를 사용한다.)
 
   value: 0
