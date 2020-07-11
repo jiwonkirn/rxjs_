@@ -13,9 +13,9 @@ import { take, tap, publish, refCount, share } from 'rxjs/operators'
 const testSource$ = interval(500).pipe(
   take(5),
   tap(x => console.log(`tap ${x}`)),
-  // share(),
-  publish(),
-  refCount(),
+  share(),
+  // publish(),
+  // refCount(),
 )
 
 const a = testSource$.subscribe(x => console.log(`a: ${x}`))

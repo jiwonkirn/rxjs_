@@ -19,24 +19,24 @@ import { multicast, take, tap, publish } from 'rxjs/operators'
 //   multicast(() => new Subject()),
 // ) as ConnectableObservable<number>
 
-// const testSource2$ = interval(500).pipe(
-//   take(5),
-//   tap(x => console.log(`tap ${x}`)),
-//   publish(),
-// ) as ConnectableObservable<number>
+const testSource$ = interval(500).pipe(
+  take(5),
+  tap(x => console.log(`tap ${x}`)),
+  publish(),
+) as ConnectableObservable<number>
 
-// const a = testSource$.subscribe(x => console.log(`a: ${x}`))
-// const b = testSource$.subscribe(x => console.log(`b: ${x}`))
+const a = testSource$.subscribe(x => console.log(`a: ${x}`))
+const b = testSource$.subscribe(x => console.log(`b: ${x}`))
 
-// testSource$.connect()
+testSource$.connect()
 
-// setTimeout(() => {
-//   console.log('timeout')
-//   a.unsubscribe()
-//   b.unsubscribe()
-//   testSource$.subscribe(x => console.log(`c: ${x}`))
-//   testSource$.connect()
-// }, 3000)
+setTimeout(() => {
+  console.log('timeout')
+  a.unsubscribe()
+  b.unsubscribe()
+  testSource$.subscribe(x => console.log(`c: ${x}`))
+  testSource$.connect()
+}, 3000)
 /**
   result:
   기존에 구독했던 subject의 구독이 완료되었으므로 c로 시작하는 부분은 실행되지 않는다.
