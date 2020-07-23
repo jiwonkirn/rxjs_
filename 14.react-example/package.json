@@ -13,6 +13,8 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-scripts": "3.4.1",
+    "redux": "^4.0.5",
+    "rxjs": "^6.6.0",
     "typescript": "~3.7.2"
   },
   "scripts": {
@@ -35,5 +37,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/redux": "^3.6.0"
   }
 }
