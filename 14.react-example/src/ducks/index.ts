@@ -1,16 +1,56 @@
-import { Subject, BehaviorSubject } from 'rxjs'
-import { scan } from 'rxjs/operators'
+import { Reducer, AnyAction } from 'redux'
+import { Subject, BehaviorSubject, empty, of, Observable, from } from 'rxjs'
+import { scan, concatMap } from 'rxjs/operators'
+
+export interface InitialState {
+  count: number
+}
+
+export const initialState: InitialState = {
+  count: 0,
+}
+
+export function reducer(state: InitialState, action: AnyAction) {
+  switch (action.type) {
+    case 'INCREMENT':
+      return { count: state.count + 1 }
+    case 'DECREMENT':
+      return { count: state.count - 1 }
+    default:
+      return state
+  }
+}
 
 // TODO: 454 page
-function createStore(rootReducer, initialState) {
+export function createStore(rootReducer: Reducer, initialState: InitialState) {
   const actionDispatcher$ = new Subject()
   const store$ = new BehaviorSubject(initialState)
 
-  actionDispatcher$.pipe(scan(rootReducer, initialState)).subscribe(store$)
+  const dispatch = actionDispatcher$.next.bind(actionDispatcher$)
+  const subscribe = store$.subscribe.bind(store$)
+  const getState = store$.getValue.bind(store$)
+
+  actionDispatcher$
+    .pipe(
+      concatMap(action => {
+        if (action instanceof Promise || action instanceof Observable) {
+          return from(action)
+        }
+        if (typeof action === 'function') {
+          action(dispatch, getState)
+          return empty()
+        }
+        return of(action)
+      }),
+    )
+    .pipe(scan<any, InitialState>(rootReducer, initialState))
+    .subscribe(store$)
 
   return {
-    dispatch: actionDispatcher$.next.bind(actionDispatcher$),
-    subscribe: store$.subscribe.bind(store$),
-    getState: store$.getValue.bind(store$),
+    dispatch,
+    subscribe,
+    getState,
   }
 }
+
+export type Store = ReturnType<typeof createStore>

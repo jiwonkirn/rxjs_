@@ -1,16 +1,25 @@
-import React, { useState } from 'react'
+import React from 'react'
 
-export default function Counter() {
-  const [count, setCount] = useState<number>(0)
+import { Store, InitialState } from '../ducks'
 
+interface Props {
+  store: Store
+  state: InitialState
+}
+
+export default function Counter({ store, state: { count } }: Props) {
   function handleCount(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault()
     const counterType = (e.target as HTMLButtonElement).getAttribute('data-counter-type')
     if (counterType === 'increment') {
-      setCount(prev => prev + 1)
+      store.dispatch((dispatch: any) => {
+        setTimeout(() => {
+          dispatch({ type: 'INCREMENT' })
+        }, 1000)
+      })
       return
     }
-    setCount(prev => (prev === 0 ? prev : prev - 1))
+    store.dispatch({ type: 'DECREMENT' })
   }
   return (
     <>

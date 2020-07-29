@@ -1,11 +1,17 @@
 import React from 'react'
 
 import Counter from './components/Counter'
+import { InitialState, Store } from './ducks'
 
-function App() {
+interface Props {
+  store: Store
+  state: InitialState
+}
+
+function App({ store, state }: Props) {
   return (
     <div className="App">
-      <Counter />
+      <Counter store={store} state={state} />
     </div>
   )
 }
