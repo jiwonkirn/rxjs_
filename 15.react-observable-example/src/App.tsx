@@ -4,6 +4,7 @@ import Header from './components/Header'
 import Loading from './components/Loading'
 import ErrorMessage from './components/ErrorMessage'
 import Login from './components/Login'
+import Logout from './components/Logout'
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
       <Loading />
       <ErrorMessage />
       <Login />
+      <Logout />
     </div>
   )
 }

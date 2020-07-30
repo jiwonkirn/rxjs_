@@ -15,7 +15,7 @@ const loadingStyle: React.CSSProperties = {
 
 export default function Loading() {
   const loading = useSelector((state: Store) => state.loading)
-  if (loading) {
+  if (!loading) {
     return null
   }
   return <div style={loadingStyle} />

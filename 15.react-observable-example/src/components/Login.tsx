@@ -1,14 +1,13 @@
 import React, { useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 
 import { Store } from '../reducers'
 
-// import { getAuth } from '../actions'
-
-function getAuth(username: string, password: string) {}
+import { getAuth } from '../actions'
 
 export default function Login() {
   const auth = useSelector((state: Store) => state.auth)
+  const dispatch = useDispatch()
   const [{ username, password }, setLoginState] = useState({
     username: '',
     password: '',
@@ -22,10 +21,10 @@ export default function Login() {
 
   function login(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault()
-    getAuth(username, password)
+    dispatch(getAuth(username, password))
   }
 
-  if (auth) {
+  if (auth.username) {
     return null
   }
 

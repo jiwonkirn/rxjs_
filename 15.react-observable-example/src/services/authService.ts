@@ -1,5 +1,6 @@
-export function fakeAuth(username: string, password: string) {
+export function fakeAuth(username: string, password: string): Promise<{ username: string }> {
   return new Promise(function (resolve, reject) {
+    console.log(username, password)
     setTimeout(() => {
       if (username === 'foo') {
         if (password === 'bar') {

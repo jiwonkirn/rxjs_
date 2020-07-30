@@ -1,6 +1,6 @@
 import { Action } from 'redux'
 
-export const enum AuthActionTypes {
+export enum AuthActionTypes {
   LOADING_START = 'LOADING_START',
   LOADING_END = 'LOADING_END',
   GET_AUTH = 'GET_AUTH',
